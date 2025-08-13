@@ -8,6 +8,5 @@ Proyecto Django estilo blog con patrón MVT. Incluye:
 - Formularios para insertar datos en cada modelo
 - Formulario de búsqueda sobre `Post`
 - Admin habilitado
-- README con guía paso a paso y orden para probar
 
 
