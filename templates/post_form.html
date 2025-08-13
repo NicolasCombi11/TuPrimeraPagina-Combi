@@ -1,0 +1,14 @@
+
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Nuevo Post</h2>
+  <p class="muted">Si no ves opciones de Autor/Categoría, cargalas primero.</p>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="actions">
+      <button class="btn primary" type="submit">Guardar</button>
+      <a class="btn" href="/">Cancelar</a>
+    </div>
+  </form>
+{% endblock %}

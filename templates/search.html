@@ -1,0 +1,24 @@
+
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Buscar Posts</h2>
+  <form method="get">
+    {{ form.as_p }}
+    <div class="actions">
+      <button class="btn primary" type="submit">Buscar</button>
+      <a class="btn" href="/">Inicio</a>
+    </div>
+  </form>
+  {% if query %}
+    <p class="muted">Resultados para: <strong>{{ query }}</strong></p>
+  {% endif %}
+  {% if results %}
+    <ul>
+      {% for p in results %}
+        <li><strong>{{ p.titulo }}</strong> — {{ p.autor }} {% if p.categoria %}· {{ p.categoria }}{% endif %} <span class="muted">({{ p.creado|date:"Y-m-d H:i" }})</span></li>
+      {% endfor %}
+    </ul>
+  {% elif query %}
+    <p>No se encontraron resultados.</p>
+  {% endif %}
+{% endblock %}
