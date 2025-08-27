@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Pages</h1>
+  {% if user.is_authenticated %}
+    <p><a class="btn primary" href="{% url 'pages:create' %}">Crear page</a>
+       <a class="btn" href="{% url 'pages:mine' %}">Mis pages</a></p>
+  {% endif %}
+  {% if pages %}
+    <div class="grid">
+      {% for p in pages %}
+        <div class="card">
+          <h3>{{ p.titulo }}</h3>
+          <p class="muted">{{ p.bajada }}</p>
+          <p><a class="btn" href="{% url 'pages:detail' p.pk %}">Leer más</a></p>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p><em>No hay páginas aún</em>.</p>
+  {% endif %}
+{% endblock %}

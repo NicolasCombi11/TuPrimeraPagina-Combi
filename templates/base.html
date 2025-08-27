@@ -8,6 +8,7 @@
     <title>TuPrimeraPagina-Combi</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.png' %}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
       body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f7f7fb; color: #111827; }
@@ -25,22 +26,42 @@
       th, td { border-bottom:1px solid #e5e7eb; padding:.6rem; text-align:left; }
       .pill { display:inline-block; padding:.2rem .5rem; border-radius:999px; background:#f3f4f6; color:#374151; font-size:.85rem; }
     </style>
+      {% load static %}
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
+
     {% block extra_head %}{% endblock %}
   </head>
-  <body>
+  <body class="site-body flex-body">
     <header>
-      <div><strong>TuPrimeraPagina-Combi</strong></div>
-      <nav>
-        <a href="/">Inicio</a>
-        <a href="/blog/posts/">Posts</a>
-        <a href="/blog/autores/nuevo/">Nuevo Autor</a>
-        <a href="/blog/categorias/nueva/">Nueva Categoría</a>
-        <a href="/blog/posts/nuevo/">Nuevo Post</a>
-        <a href="/blog/buscar/">Buscar</a>
-        <a href="/admin/">Admin</a>
-      </nav>
-    </header>
-    <main class="container">
+    <div>
+        <strong>TuPrimeraPagina-Combi</strong>
+    </div>
+    <nav style="display: flex; align-items: center;">
+        <div style="flex-grow: 1;">
+            <a href="/">Inicio</a>
+            <a href="{% url 'about' %}">About</a>
+            <a href="/blog/posts/">Posts</a>
+            <a href="/blog/buscar/">Buscar</a>
+            <a href="/pages/">Pages</a>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}">Profile</a>
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                   {% csrf_token %}
+                 <button type="submit" class="nav-link-button">
+                   Logout
+                 </button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'signup' %}">Signup</a>
+            {% endif %}
+            <a href="/admin/" class="btn primary">Admin</a>
+        </div>
+    </nav>
+</header>
+    <main class="site-main" >
       {% if messages %}
         <ul>
           {% for message in messages %}

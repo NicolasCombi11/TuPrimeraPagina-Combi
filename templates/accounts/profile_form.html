@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="form-container">
+    <h1>Editar perfil</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Datos de usuario</legend>
+            {{ uform.as_p }}
+        </fieldset>
+        <fieldset>
+            <legend>Perfil</legend>
+            {{ pform.as_p }}
+        </fieldset>
+        <button class="btn primary" type="submit">Guardar</button>
+    </form>
+</div>
+{% endblock %}

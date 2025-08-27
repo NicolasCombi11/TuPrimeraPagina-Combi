@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Mis pages</h1>
+  {% if pages %}
+    <ul>
+      {% for p in pages %}
+        <li>
+          <a href="{% url 'pages:detail' p.pk %}">{{ p.titulo }}</a>
+          — <a href="{% url 'pages:update' p.pk %}">Editar</a>
+          — <a href="{% url 'pages:delete' p.pk %}">Borrar</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p><em>No tenés pages todavía</em>.</p>
+  {% endif %}
+{% endblock %}
