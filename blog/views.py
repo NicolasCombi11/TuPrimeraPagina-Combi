@@ -4,6 +4,11 @@ from django.contrib import messages
 from .forms import AuthorForm, CategoryForm, PostForm, PostSearchForm
 from .models import Author, Category, Post
 from django.db.models import Q
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 def author_create(request):
     if request.method == 'POST':
@@ -57,3 +62,26 @@ def post_search(request):
             Q(titulo__icontains=query) | Q(contenido__icontains=query)
         ).select_related('autor','categoria').order_by('-creado')
     return render(request, 'search.html', {'form': form, 'results': results, 'query': query})
+
+
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    template_name = 'blog/post_form.html'
+    fields = ['titulo', 'subtitulo', 'contenido', 'imagen', 'autor', 'categoria']
+    success_url = reverse_lazy('posts')
+
+class PostUpdateView(LoginRequiredMixin, UpdateView):
+    model = Post
+    template_name = 'blog/post_form.html'
+    fields = ['titulo', 'subtitulo', 'contenido', 'imagen', 'autor', 'categoria']
+    success_url = reverse_lazy('posts')
+
+class PostDeleteView(LoginRequiredMixin, DeleteView):
+    model = Post
+    template_name = 'blog/post_confirm_delete.html'
+    success_url = reverse_lazy('posts')
+    
+    
+def posts(request):
+    posts_list = Post.objects.all()
+    return render(request, 'blog/posts.html', {'posts': posts_list})
