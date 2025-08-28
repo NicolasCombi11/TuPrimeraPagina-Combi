@@ -1,13 +1,11 @@
-
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-  <h1>Bienvenido/a 👋</h1>
-  <p class="muted">Proyecto base estilo blog para la entrega</p>
-  <div class="actions">
-    <a class="btn primary" href="/blog/posts/">Ver Posts</a>
-    <a class="btn" href="/blog/autores/nuevo/">Cargar Autor</a>
-    <a class="btn" href="/blog/categorias/nueva/">Cargar Categoría</a>
-    <a class="btn" href="/blog/posts/nuevo/">Cargar Post</a>
-    <a class="btn" href="/blog/buscar/">Buscar</a>
-  </div>
+<div class="hero-section">
+    <div class="hero-content">
+        <h1>Construye tu primera página con Python y Django</h1>
+        <p>Tutoriales, guías y consejos para que pases de cero a desarrollador web.</p>
+        <a href="{% url 'pages' %}" class="btn primary hero-btn">Explora el blog</a>
+    </div>
+</div>
 {% endblock %}

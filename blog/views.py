@@ -49,8 +49,8 @@ def post_create(request):
     return render(request, 'post_form.html', {'form': form})
 
 def post_list(request):
-    posts = Post.objects.select_related('autor','categoria').order_by('-creado')
-    return render(request, 'post_list.html', {'posts': posts})
+    posts = Post.objects.all()
+    return render(request, 'blog/post_list.html', {'posts': posts})
 
 def post_search(request):
     form = PostSearchForm(request.GET or None)
@@ -85,3 +85,9 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 def posts(request):
     posts_list = Post.objects.all()
     return render(request, 'blog/posts.html', {'posts': posts_list})
+
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/post_detail.html'
+    context_object_name = 'post'

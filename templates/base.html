@@ -34,15 +34,14 @@
   <body class="site-body flex-body">
     <header>
     <div>
-        <strong>TuPrimeraPagina-Combi</strong>
+        <strong>TuPrimeraPagina</strong>
     </div>
     <nav style="display: flex; align-items: center;">
         <div style="flex-grow: 1;">
             <a href="/">Inicio</a>
-            <a href="{% url 'about' %}">About</a>
-            <a href="/blog/posts/">Posts</a>
             <a href="/blog/buscar/">Buscar</a>
             <a href="/pages/">Pages</a>
+            <a href="{% url 'about' %}">About</a>
         </div>
         <div style="display: flex; align-items: center; gap: 1rem;">
             {% if user.is_authenticated %}

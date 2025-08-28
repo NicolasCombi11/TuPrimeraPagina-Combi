@@ -1,18 +1,35 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Listado de Posts</h1>
+    <h1 class="page-title">Listado de Posts</h1>
+
+    {% if user.is_authenticated %}
+        <div class="action-bar">
+            <a href="{% url 'post_create' %}" class="btn primary">Cargar Nuevo Post</a>
+        </div>
+    {% endif %}
+
+    <div class="posts-container">
+        </div>
+        
     {% if posts %}
         <div class="posts-container">
         {% for post in posts %}
-            <div class="post-item">
-                <h2>{{ post.titulo }}</h2>
-                <p class="post-date">Creado el: {{ post.creado }}</p>
-                <p>{{ post.contenido|truncatechars:200 }}</p>
-                <a href="{% url 'post_detail' post.pk %}" class="btn">Leer más</a>
+            <div class="post-card">
+                {% if post.imagen %}
+                    <img src="{{ post.imagen.url }}" alt="{{ post.titulo }}" class="post-image">
+                {% endif %}
+                <div class="post-content">
+                    <h2 class="post-title">{{ post.titulo }}</h2>
+                    <p class="post-meta">
+                        Por: {{ post.autor }} | Creado: {{ post.creado|date:"F j, Y" }}
+                    </p>
+                    <p>{{ post.contenido|truncatechars:200 }}</p>
+                    <a href="{% url 'post_detail' post.pk %}" class="btn primary">Leer más</a>
+                </div>
             </div>
         {% endfor %}
         </div>
     {% else %}
-        <p>No hay posts disponibles.</p>
+        <p class="no-posts-message">No hay posts disponibles.</p>
     {% endif %}
 {% endblock %}

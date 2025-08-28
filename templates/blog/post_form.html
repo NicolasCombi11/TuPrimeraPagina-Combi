@@ -3,11 +3,18 @@
 
 {% block content %}
 <div class="form-container">
-    <h1>{% if form.instance.pk %}Editar{% else %}Nuevo{% endif %} Post</h1>
+    <h1 class="form-title">
+        {% if form.instance.pk %}Editar{% else %}Nuevo{% endif %} Post
+    </h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button class="btn primary" type="submit">Guardar</button>
+        <fieldset class="form-fieldset">
+            <legend class="form-legend">Datos del Post</legend>
+            {{ form.as_p }}
+        </fieldset>
+        <div class="form-actions">
+            <button class="btn primary" type="submit">Guardar</button>
+        </div>
     </form>
 </div>
 {% endblock %}
