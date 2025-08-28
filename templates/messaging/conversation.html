@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="form-container conversation-container">
+    <h1>Conversación con {{ recipient.username }}</h1>
+    
+    <div class="conversation-history">
+        {% for message in messages %}
+        <div class="message-bubble {% if message.sender == user %}sent{% else %}received{% endif %}">
+            <div class="message-body">{{ message.body }}</div>
+            <span class="timestamp">{{ message.timestamp|date:"H:i" }}</span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <form method="post" class="message-form">
+        {% csrf_token %}
+        <textarea name="body" placeholder="Escribe un mensaje..." required></textarea>
+        <button type="submit" class="btn primary">Enviar</button>
+    </form>
+</div>
+{% endblock %}

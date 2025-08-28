@@ -15,7 +15,7 @@ urlpatterns = [
     path('pages/', post_list, name='pages'),
     path('accounts/', include('accounts.urls')),               
     path('accounts/', include('django.contrib.auth.urls')),
-    path('messages/', include('messaging.urls')),
+    path('messages/', include('messaging.urls', namespace='messaging')),
 
 ]
 

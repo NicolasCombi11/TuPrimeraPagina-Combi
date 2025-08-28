@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="form-container inbox-container">
+    <div class="inbox-header">
+        <h1>Bandeja de Entrada</h1>
+        <a href="{% url 'messaging:compose' %}" class="btn primary">Redactar Mensaje</a>
+    </div>
+    
+    {% if conversations %}
+        <ul class="message-list">
+            {% for convo in conversations %}
+                {% with partner=convo.sender %}
+                <li class="message-item {% if not convo.is_read and convo.recipient == user %}unread{% endif %}">
+                    <a href="{% url 'messaging:conversation' username=partner.username %}">
+                        <div class="message-info">
+                            <span class="message-sender">{{ partner.username }}</span>
+                            <span class="message-body">{{ convo.body|truncatechars:50 }}</span>
+                        </div>
+                        <span class="message-date">{{ convo.timestamp|date:"M j, Y" }}</span>
+                    </a>
+                </li>
+                {% endwith %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="no-messages">No tienes mensajes.</p>
+    {% endif %}
+</div>
+{% endblock %}

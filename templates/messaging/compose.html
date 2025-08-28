@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="form-container">
+    <h1>Redactar Mensaje</h1>
+    <form method="post" action="{% url 'messaging:compose' %}">
+        {% csrf_token %}
+        <label for="recipient">Destinatario:</label>
+        <select name="recipient" id="recipient">
+            {% for user_item in users %}
+                <option value="{{ user_item.username }}">{{ user_item.username }}</option>
+            {% endfor %}
+        </select>
+        <label for="body">Mensaje:</label>
+        <textarea name="body" id="body" rows="4" placeholder="Escribe tu mensaje..." required></textarea>
+        <button type="submit" class="btn primary">Enviar</button>
+    </form>
+</div>
+{% endblock %}
