@@ -60,7 +60,7 @@ def post_search(request):
         query = form.cleaned_data['q']
         results = Post.objects.filter(
             Q(titulo__icontains=query) | Q(contenido__icontains=query)
-        ).select_related('autor','categoria').order_by('-creado')
+        ).select_related('autor','categoria').order_by('-fecha_publicacion')
     return render(request, 'search.html', {'form': form, 'results': results, 'query': query})
 
 

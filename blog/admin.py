@@ -12,6 +12,6 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('id','titulo','autor','categoria','creado')
-    search_fields = ('titulo','contenido')
-    list_filter = ('categoria','autor')
+    list_display = ('titulo', 'autor', 'categoria', 'fecha_publicacion') 
+    list_filter = ('autor', 'categoria', 'fecha_publicacion')
+    search_fields = ('titulo', 'contenido')
