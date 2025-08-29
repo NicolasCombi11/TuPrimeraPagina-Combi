@@ -9,17 +9,31 @@
     {% if conversations %}
         <ul class="message-list">
             {% for convo in conversations %}
-                {% with partner=convo.sender %}
-                <li class="message-item {% if not convo.is_read and convo.recipient == user %}unread{% endif %}">
-                    <a href="{% url 'messaging:conversation' username=partner.username %}">
-                        <div class="message-info">
-                            <span class="message-sender">{{ partner.username }}</span>
-                            <span class="message-body">{{ convo.body|truncatechars:50 }}</span>
-                        </div>
-                        <span class="message-date">{{ convo.timestamp|date:"M j, Y" }}</span>
-                    </a>
-                </li>
-                {% endwith %}
+                {% if convo.sender == user %}
+                    {% with partner=convo.recipient %}
+                        <li class="message-item {% if not convo.is_read and convo.recipient == user %}unread{% endif %}">
+                            <a href="{% url 'messaging:conversation' username=partner.username %}">
+                                <div class="message-info">
+                                    <span class="message-sender">Para: {{ partner.username }}</span>
+                                    <span class="message-body">{{ convo.body|truncatechars:50 }}</span>
+                                </div>
+                                <span class="message-date">{{ convo.timestamp|date:"M j, Y" }}</span>
+                            </a>
+                        </li>
+                    {% endwith %}
+                {% else %}
+                    {% with partner=convo.sender %}
+                        <li class="message-item {% if not convo.is_read and convo.recipient == user %}unread{% endif %}">
+                            <a href="{% url 'messaging:conversation' username=partner.username %}">
+                                <div class="message-info">
+                                    <span class="message-sender">De: {{ partner.username }}</span>
+                                    <span class="message-body">{{ convo.body|truncatechars:50 }}</p>
+                                </div>
+                                <span class="message-date">{{ convo.timestamp|date:"M j, Y" }}</span>
+                            </a>
+                        </li>
+                    {% endwith %}
+                {% endif %}
             {% endfor %}
         </ul>
     {% else %}

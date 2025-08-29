@@ -5,10 +5,17 @@
     
     <div class="conversation-history">
         {% for message in messages %}
-        <div class="message-bubble {% if message.sender == user %}sent{% else %}received{% endif %}">
-            <div class="message-body">{{ message.body }}</div>
-            <span class="timestamp">{{ message.timestamp|date:"H:i" }}</span>
-        </div>
+       <div class="message-bubble {% if message.sender == user %}sent{% else %}received{% endif %}">
+    <div class="message-body">
+        {{ message.body }}
+    </div>
+    {% if message.sender == user %}
+        <a href="{% url 'messaging:message_delete' pk=message.pk %}" class="delete-btn">
+            <i class="fas fa-trash"></i>
+        </a>
+    {% endif %}
+    <span class="timestamp">{{ message.timestamp|date:"H:i" }}</span>
+       </div>
         {% endfor %}
     </div>
 

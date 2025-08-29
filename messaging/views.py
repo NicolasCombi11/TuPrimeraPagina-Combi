@@ -2,29 +2,29 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.views.generic.edit import DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse_lazy
 from .models import Message
 
 @login_required
 def inbox(request):
-    # Obtener todos los mensajes donde el usuario es el remitente o el destinatario
-    all_messages = Message.objects.filter(
+    # Obtener el último mensaje para cada conversación
+    # Esta es una manera más robusta de hacer la consulta en SQLite
+    latest_messages = {}
+    messages = Message.objects.filter(
         Q(sender=request.user) | Q(recipient=request.user)
-    ).order_by('-timestamp')
+    ).order_by('timestamp') # Ordenamos por fecha para obtener el último mensaje
 
-    # Diccionario para almacenar la última conversación de cada usuario
-    conversations = {}
-    
-    for message in all_messages:
+    for message in messages:
         if message.sender == request.user:
             partner = message.recipient
         else:
             partner = message.sender
+        latest_messages[partner] = message # Sobrescribe hasta encontrar el más reciente
 
-        if partner not in conversations:
-            conversations[partner] = message
-
-    # Convertir el diccionario a una lista de mensajes
-    conversations_list = list(conversations.values())
+    # Convertir el diccionario en una lista de mensajes
+    conversations_list = list(latest_messages.values())
 
     users = User.objects.all().exclude(username=request.user.username)
 
@@ -33,37 +33,57 @@ def inbox(request):
         'users': users
     })
 
-
+    
+    
 @login_required
 def conversation(request, username):
     recipient = get_object_or_404(User, username=username)
-    
-    # Nueva consulta para recuperar todos los mensajes entre ambos usuarios
+
+    # Consulta corregida para obtener todos los mensajes entre los dos usuarios
     messages = Message.objects.filter(
-        (Q(sender=request.user) & Q(recipient=recipient)) |
-        (Q(sender=recipient) & Q(recipient=request.user))
+        Q(sender=request.user, recipient=recipient) |
+        Q(sender=recipient, recipient=request.user)
     ).order_by('timestamp')
 
-    # Marcar los mensajes como leídos
+    # Marcar los mensajes no leídos como leídos
     unread_messages = messages.filter(recipient=request.user, is_read=False)
     for message in unread_messages:
         message.is_read = True
         message.save()
+        
+    if request.method == 'POST':
+        body = request.POST.get('body')
+        if body:
+            Message.objects.create(sender=request.user, recipient=recipient, body=body)
+        return redirect('messaging:conversation', username=recipient.username)
 
     return render(request, 'messaging/conversation.html', {
         'recipient': recipient,
         'messages': messages
     })
 
+
 @login_required
-def compose(request, username=None):
+def compose(request):
     if request.method == 'POST':
-        recipient = get_object_or_404(User, username=request.POST.get('recipient'))
+        recipient_username = request.POST.get('recipient')
         body = request.POST.get('body')
         
+        recipient = get_object_or_404(User, username=recipient_username)
+
         if body:
             Message.objects.create(sender=request.user, recipient=recipient, body=body)
+            # Redireccionamiento corregido
             return redirect('messaging:conversation', username=recipient.username)
 
     users = User.objects.all().exclude(username=request.user.username)
     return render(request, 'messaging/compose.html', {'users': users})
+
+class MessageDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Message
+    template_name = 'messaging/message_confirm_delete.html'
+    success_url = reverse_lazy('messaging:inbox')
+
+    def test_func(self):
+        message = self.get_object()
+        return self.request.user == message.sender

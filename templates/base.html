@@ -62,13 +62,7 @@
     </nav>
 </header>
     <main class="site-main" >
-      {% if messages %}
-        <ul>
-          {% for message in messages %}
-            <li>{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
+      
       {% block content %}{% endblock %}
     </main>
     <footer>Hecho con Django • MVT • {{ request.path }}</footer>
