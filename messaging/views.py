@@ -3,27 +3,25 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.views.generic.edit import DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from .models import Message
 
 @login_required
 def inbox(request):
-    # Obtener el último mensaje para cada conversación
-    # Esta es una manera más robusta de hacer la consulta en SQLite
     latest_messages = {}
     messages = Message.objects.filter(
         Q(sender=request.user) | Q(recipient=request.user)
-    ).order_by('timestamp') # Ordenamos por fecha para obtener el último mensaje
+    ).order_by('timestamp') 
 
     for message in messages:
         if message.sender == request.user:
             partner = message.recipient
         else:
             partner = message.sender
-        latest_messages[partner] = message # Sobrescribe hasta encontrar el más reciente
+        latest_messages[partner] = message 
 
-    # Convertir el diccionario en una lista de mensajes
+    
     conversations_list = list(latest_messages.values())
 
     users = User.objects.all().exclude(username=request.user.username)
@@ -79,11 +77,7 @@ def compose(request):
     users = User.objects.all().exclude(username=request.user.username)
     return render(request, 'messaging/compose.html', {'users': users})
 
-class MessageDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class MessageDeleteView(LoginRequiredMixin, DeleteView):
     model = Message
     template_name = 'messaging/message_confirm_delete.html'
     success_url = reverse_lazy('messaging:inbox')
-
-    def test_func(self):
-        message = self.get_object()
-        return self.request.user == message.sender
