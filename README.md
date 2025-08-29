@@ -51,7 +51,7 @@ La aplicación cuenta con un sistema de administración robusto, perfiles de usu
 
 ## Autor
 
-Este proyecto fue desarrollado por **Nicolás Combi** como parte de un bootcamp de desarrollo web.
+Este proyecto fue desarrollado por **Nicolás Combi** como parte de un bootcamp del curso Python/Django.
 
 ---
 
