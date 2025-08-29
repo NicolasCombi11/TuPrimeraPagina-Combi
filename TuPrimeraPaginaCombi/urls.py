@@ -13,6 +13,7 @@ urlpatterns = [
     path('about/', TemplateView.as_view(template_name='about.html'), name='about'),
     path('blog/', include('blog.urls')),
     path('pages/', post_list, name='pages'),
+    path('pages/', include('blog.urls')),
     path('accounts/', include('accounts.urls')),               
     path('accounts/', include('django.contrib.auth.urls')),
     path('messages/', include('messaging.urls', namespace='messaging')),

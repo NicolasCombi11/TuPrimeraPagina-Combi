@@ -2,14 +2,15 @@
 from django import forms
 from .models import Author, Category, Post
 
-class AuthorForm(forms.Form):
-    nombre = forms.CharField(max_length=80, label='Nombre')
-    email = forms.EmailField(label='Email')
-    bio = forms.CharField(widget=forms.Textarea, required=False, label='Bio')
-
-class CategoryForm(forms.Form):
-    nombre = forms.CharField(max_length=50, label='Nombre')
-    descripcion = forms.CharField(widget=forms.Textarea, required=False, label='Descripción')
+class AuthorForm(forms.ModelForm):
+    class Meta:
+        model = Author
+        fields = ['nombre', 'email', 'bio']
+        
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['nombre']
 
 class PostForm(forms.Form):
     titulo = forms.CharField(max_length=120, label='Título')

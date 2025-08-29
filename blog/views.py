@@ -14,23 +14,23 @@ def author_create(request):
     if request.method == 'POST':
         form = AuthorForm(request.POST)
         if form.is_valid():
-            Author.objects.create(**form.cleaned_data)
+            form.save()
             messages.success(request, 'Autor creado correctamente.')
-            return redirect('author_create')
+            return redirect('post_create')
     else:
         form = AuthorForm()
-    return render(request, 'author_form.html', {'form': form})
+    return render(request, 'blog/author_form.html', {'form': form})
 
 def category_create(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         if form.is_valid():
-            Category.objects.create(**form.cleaned_data)
+            form.save()
             messages.success(request, 'Categoría creada correctamente.')
-            return redirect('category_create')
+            return redirect('post_create')
     else:
         form = CategoryForm()
-    return render(request, 'category_form.html', {'form': form})
+    return render(request, 'blog/category_form.html', {'form': form})
 
 def post_create(request):
     if request.method == 'POST':
@@ -68,7 +68,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = 'blog/post_form.html'
     fields = ['titulo', 'subtitulo', 'contenido', 'imagen', 'autor', 'categoria']
-    success_url = reverse_lazy('posts')
+    success_url = reverse_lazy('pages') 
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post

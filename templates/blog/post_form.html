@@ -10,7 +10,30 @@
         {% csrf_token %}
         <fieldset class="form-fieldset">
             <legend class="form-legend">Datos del Post</legend>
-            {{ form.as_p }}
+            
+            <div class="field-row">
+                <label for="id_autor">Autor</label>
+                <div class="field-group">
+                    {{ form.autor }}
+                    <a href="{% url 'author_create' %}" class="btn">Crear nuevo autor</a>
+                </div>
+            </div>
+            
+            <div class="field-row">
+                <label for="id_categoria">Categoría</label>
+                <div class="field-group">
+                    {{ form.categoria }}
+                    <a href="{% url 'category_create' %}" class="btn">Crear nueva categoría</a>
+                </div>
+            </div>
+            
+            {% for field in form %}
+                {% if field.name != 'autor' and field.name != 'categoria' %}
+                    <p>{{ field.label_tag }}</p>
+                    <p>{{ field }}</p>
+                {% endif %}
+            {% endfor %}
+            
         </fieldset>
         <div class="form-actions">
             <button class="btn primary" type="submit">Guardar</button>
